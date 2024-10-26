@@ -5,6 +5,16 @@
 - IMAPI Authentication Gateway Service: https://github.com/Kolman-Freecss/kf-imapi-auth-gateway
 - IMAPI DevOps / Kafka Event Handling: https://github.com/Kolman-Freecss/kf-imapi-devops
 
+## Getting Started
+
+- (Optional) Install Angular DevTools in your browser 
+
+## Tech stack
+
+- Angular 18
+- Tailwind CSS
+- Karma
+
 ---
 
 Shield: [![CC-BY-NC-ND 4.0][CC-BY-NC-ND-shield]][CC-BY-NC-ND]
