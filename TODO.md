@@ -1,0 +1,4 @@
+- [ ] GraphQL
+- [ ] Github Actions
+  - [ ] Vercel deployment
+  - [ ] AWS deployment
