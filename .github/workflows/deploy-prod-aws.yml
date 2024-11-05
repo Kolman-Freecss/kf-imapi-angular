@@ -1,0 +1,45 @@
+name: Deploy to Amazon EC2
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        options:
+          - production
+          - staging
+
+env:
+  EC2_INSTANCE: YOUR_EC2_INSTANCE_IP          # Set this to your EC2 instance public IP
+  EC2_USER: YOUR_EC2_USER                      # Usually "ec2-user" or "ubuntu"
+  PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}  # Store your private key in GitHub Secrets
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ env.EC2_USER }}@${{ env.EC2_INSTANCE }} << 'EOF'
+            # Commands to pull the latest image and run your application
+            cd /path/to/your/app
+            docker-compose pull
+            docker-compose up -d
+          EOF

@@ -5,6 +5,19 @@
 - IMAPI Authentication Gateway Service: https://github.com/Kolman-Freecss/kf-imapi-auth-gateway
 - IMAPI DevOps / Kafka Event Handling: https://github.com/Kolman-Freecss/kf-imapi-devops
 
+## Public URL
+
+Vercel: https://kf-imapi-angular.vercel.app/home
+
+## Brief description
+
+Simple Angular application to demonstrate the use of the IMAPI Angular service.
+
+### Features
+
+- Deploy through Gitlab Actions to AWS EC2
+- Vercel deployment configured. Every push in master Vercel will pull the latest changes and deploy the application
+
 ## Getting Started
 
 - (Optional) Install Angular DevTools in your browser 
