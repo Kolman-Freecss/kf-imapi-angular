@@ -27,6 +27,13 @@ Simple Angular application to demonstrate the use of the IMAPI Angular service.
 - Angular 18
 - Tailwind CSS
 - Karma
+- Node 20.15.1
+- Npm 10.7.0
+
+## Secrets Config
+
+- Configure secrets in Gitlab CI/CD
+- Extract values from AWS and Docker Hub
 
 ---
 

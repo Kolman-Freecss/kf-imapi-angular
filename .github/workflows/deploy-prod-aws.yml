@@ -11,13 +11,11 @@ on:
           - production
           - staging
 
-env:
-  EC2_INSTANCE: YOUR_EC2_INSTANCE_IP          # Set this to your EC2 instance public IP
-  EC2_USER: YOUR_EC2_USER                      # Usually "ec2-user" or "ubuntu"
-  PRIVATE_KEY: ${{ secrets.EC2_PRIVATE_KEY }}  # Store your private key in GitHub Secrets
-
 permissions:
   contents: read
+
+env:
+  IMAGE_NAME: angular-app-imapi
 
 jobs:
   deploy:
@@ -26,20 +24,46 @@ jobs:
     environment: production
 
     steps:
-      - name: Checkout
+      # 1. Check out the repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+      # 2. Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-      - name: Deploy to EC2
+      # 3. Build the Angular application
+      - name: Build Angular App
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ env.EC2_USER }}@${{ env.EC2_INSTANCE }} << 'EOF'
-            # Commands to pull the latest image and run your application
-            cd /path/to/your/app
-            docker-compose pull
-            docker-compose up -d
-          EOF
+          npm install
+          npm run build --prod
+
+      # 4. Build the Docker image
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest .
+
+      # 5. Log in to Docker Hub or ECR (replace with ECR login if using AWS ECR)
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }} # Access token
+
+      # 6. Push the Docker image
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+      # 7. Deploy the image on the EC2 instance
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+            docker stop angular_app_imapi || true
+            docker rm angular_app_imapi || true
+            docker run -d -p 80:80 --name angular_app_imapi ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
