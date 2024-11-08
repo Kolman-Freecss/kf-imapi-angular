@@ -12,13 +12,13 @@ RUN npm install
 COPY . .
 
 # Build the Angular app
-RUN npm run build --prod
+RUN npm run build
 
 # Stage 2: Serve the app with Nginx
 FROM nginx:alpine
 
 # Copy the built files to the Nginx HTML directory
-COPY --from=build /app/dist/kf-imapi-angular /usr/share/nginx/html
+COPY --from=build /app/dist/kf-imapi-angular/browser /usr/share/nginx/html
 
 # Copy a custom Nginx configuration file if needed (optional)
 # COPY nginx.conf /etc/nginx/nginx.conf
