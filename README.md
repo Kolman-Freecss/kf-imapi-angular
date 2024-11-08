@@ -22,6 +22,14 @@ Simple Angular application to demonstrate the use of the IMAPI Angular service.
 
 - (Optional) Install Angular DevTools in your browser 
 
+### Use
+
+- Execute locally through `ng serve` or `docker`:
+```bash
+docker build -t kf-imapi-angular .
+docker run -p 80:80 kf-imapi-angular
+```
+
 ## Tech stack
 
 - Angular 18

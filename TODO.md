@@ -1,4 +1,5 @@
 - [ ] GraphQL
 - [ ] Github Actions
-  - [ ] Vercel deployment
-  - [ ] AWS deployment
+  - [X] Vercel deployment
+  - [X] AWS deployment
+  - [ ] Test coverage
