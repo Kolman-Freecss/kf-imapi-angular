@@ -33,7 +33,9 @@ docker run -p 80:80 kf-imapi-angular
 ## Tech stack
 
 - Angular 18
+  - Standalone Components 
 - Tailwind CSS
+- Animations CSS
 - Karma
 - Node 20.15.1
 - Npm 10.7.0
